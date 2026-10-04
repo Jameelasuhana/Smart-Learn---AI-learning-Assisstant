@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile – Smart Learn</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="dashboard.html" class="brand-logo">
+        <i class="fas fa-brain"></i> Smart Learn
+      </a>
+      <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+      <ul class="nav-links">
+        <li><a href="dashboard.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="ask-ai.html" class="nav-link"><i class="fas fa-question-circle"></i> Ask AI</a></li>
+        <li><a href="explain.html" class="nav-link"><i class="fas fa-lightbulb"></i> Explain</a></li>
+        <li><a href="summarize.html" class="nav-link"><i class="fas fa-file-alt"></i> Summarize</a></li>
+        <li><a href="test-generator.html" class="nav-link"><i class="fab fa-youtube"></i> Generate Test</a></li>
+        <li><a href="history.html" class="nav-link"><i class="fas fa-history"></i> History</a></li>
+        <li><a href="progress.html" class="nav-link"><i class="fas fa-chart-line"></i> Progress</a></li>
+        <li><a href="profile.html" class="nav-link active"><i class="fas fa-user"></i> <span id="nav-user-name">Profile</span></a></li>
+        <li><a href="#" id="nav-logout-btn" class="btn btn-outline btn-sm" style="color: var(--danger); border-color: #fca5a5;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content" style="max-width: 600px;">
+
+    <div class="card" style="text-align: center; padding: 2.5rem 1.5rem; margin-bottom: 2rem;">
+      <div style="width: 90px; height: 90px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; margin: 0 auto 1.2rem; box-shadow: var(--shadow-md);">
+        <i class="fas fa-user-graduate"></i>
+      </div>
+
+      <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.3rem;" id="profile-name">
+        Student Name
+      </h2>
+
+      <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem;" id="profile-email">
+        student@example.com
+      </p>
+
+      <span class="badge badge-success" style="font-size: 0.85rem; padding: 0.4rem 1rem;">
+        <i class="fas fa-check-circle"></i> Active Smart Learn Student Account
+      </span>
+    </div>
+
+    <!-- Account Overview Box -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <h3 class="card-title" style="margin-bottom: 1rem;">
+        <i class="fas fa-id-card" style="color: var(--primary);"></i> Account Information
+      </h3>
+
+      <div style="display: flex; flex-direction: column; gap: 0.8rem; font-size: 0.95rem;">
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+          <span style="color: var(--text-muted);">Account ID</span>
+          <span style="font-weight: 600; font-family: monospace;" id="profile-id">--</span>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+          <span style="color: var(--text-muted);">Member Since</span>
+          <span style="font-weight: 600;" id="profile-date">--</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div style="text-align: center;">
+      <button type="button" onclick="logoutUser()" class="btn btn-danger btn-lg" style="width: 100%;">
+        <i class="fas fa-sign-out-alt"></i> Log Out of Account
+      </button>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 Smart Learn – AI-Powered Learning Assistant.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      checkAuthProtection();
+
+      try {
+        const user = await apiRequest('/api/auth/me', 'GET', null, true);
+        document.getElementById('profile-name').textContent = user.name;
+        document.getElementById('profile-email').textContent = user.email;
+        document.getElementById('profile-id').textContent = user.id;
+        document.getElementById('profile-date').textContent = new Date(user.created_at).toLocaleDateString();
+      } catch (err) {
+        console.error('Failed to load profile:', err);
+      }
+    });
+  </script>
+</body>
+</html>

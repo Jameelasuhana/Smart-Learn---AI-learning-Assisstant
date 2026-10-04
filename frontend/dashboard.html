@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard – Smart Learn</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="dashboard.html" class="brand-logo">
+        <i class="fas fa-brain"></i> Smart Learn
+      </a>
+      <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+      <ul class="nav-links">
+        <li><a href="dashboard.html" class="nav-link active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="ask-ai.html" class="nav-link"><i class="fas fa-question-circle"></i> Ask AI</a></li>
+        <li><a href="explain.html" class="nav-link"><i class="fas fa-lightbulb"></i> Explain</a></li>
+        <li><a href="summarize.html" class="nav-link"><i class="fas fa-file-alt"></i> Summarize</a></li>
+        <li><a href="test-generator.html" class="nav-link"><i class="fab fa-youtube"></i> Generate Test</a></li>
+        <li><a href="history.html" class="nav-link"><i class="fas fa-history"></i> History</a></li>
+        <li><a href="progress.html" class="nav-link"><i class="fas fa-chart-line"></i> Progress</a></li>
+        <li><a href="profile.html" class="nav-link"><i class="fas fa-user"></i> <span id="nav-user-name">Profile</span></a></li>
+        <li><a href="#" id="nav-logout-btn" class="btn btn-outline btn-sm" style="color: var(--danger); border-color: #fca5a5;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- Welcome Banner -->
+    <div style="background: linear-gradient(135deg, var(--primary), var(--accent)); color: #ffffff; padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 2rem; box-shadow: var(--shadow-md);">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h1 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.4rem;">
+            Welcome back, <span id="user-welcome-name">Student</span>! 👋
+          </h1>
+          <p style="color: #e0e7ff; font-size: 1.05rem;">
+            Ready to test your knowledge or explore new concepts today?
+          </p>
+        </div>
+        <a href="test-generator.html" class="btn" style="background: #ffffff; color: var(--primary); font-weight: 700;">
+          <i class="fab fa-youtube"></i> Create AI Test
+        </a>
+      </div>
+    </div>
+
+    <!-- Quick Stats Grid -->
+    <section style="margin-bottom: 2.5rem;">
+      <h2 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main);">
+        <i class="fas fa-chart-pie" style="color: var(--primary);"></i> Overview Metrics
+      </h2>
+      <div class="grid-4">
+        <!-- Stat 1 -->
+        <div class="card" style="border-left: 4px solid var(--primary);">
+          <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Tests Attempted</div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--text-main); margin-top: 0.3rem;" id="stat-tests-attempted">0</div>
+        </div>
+
+        <!-- Stat 2 -->
+        <div class="card" style="border-left: 4px solid var(--accent);">
+          <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Questions Attempted</div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--text-main); margin-top: 0.3rem;" id="stat-questions-attempted">0</div>
+        </div>
+
+        <!-- Stat 3 -->
+        <div class="card" style="border-left: 4px solid var(--info);">
+          <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Average Score</div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--text-main); margin-top: 0.3rem;" id="stat-avg-score">0%</div>
+        </div>
+
+        <!-- Stat 4 -->
+        <div class="card" style="border-left: 4px solid var(--success);">
+          <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Best Score</div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--text-main); margin-top: 0.3rem;" id="stat-best-score">0%</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Actions Grid -->
+    <section style="margin-bottom: 2.5rem;">
+      <h2 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main);">
+        <i class="fas fa-bolt" style="color: var(--warning);"></i> Quick Actions
+      </h2>
+      <div class="grid-3">
+        <!-- Action 1 -->
+        <a href="ask-ai.html" class="card" style="text-decoration: none; color: inherit;">
+          <div style="width: 45px; height: 45px; background: var(--primary-light); color: var(--primary); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 0.8rem;">
+            <i class="fas fa-question-circle"></i>
+          </div>
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem;">Ask AI</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted);">Get instant answers to any educational question with key takeaways.</p>
+        </a>
+
+        <!-- Action 2 -->
+        <a href="explain.html" class="card" style="text-decoration: none; color: inherit;">
+          <div style="width: 45px; height: 45px; background: #f0fdf4; color: var(--success); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 0.8rem;">
+            <i class="fas fa-lightbulb"></i>
+          </div>
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem;">Explain Concept</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted);">Understand concepts tailored for Beginner, Intermediate, or Advanced levels.</p>
+        </a>
+
+        <!-- Action 3 -->
+        <a href="summarize.html" class="card" style="text-decoration: none; color: inherit;">
+          <div style="width: 45px; height: 45px; background: #fef3c7; color: var(--warning); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 0.8rem;">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem;">Summarize Text</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted);">Extract bullet summaries, main points, and key terms from study text.</p>
+        </a>
+
+        <!-- Action 4 -->
+        <a href="test-generator.html" class="card" style="text-decoration: none; color: inherit;">
+          <div style="width: 45px; height: 45px; background: #fef2f2; color: var(--danger); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 0.8rem;">
+            <i class="fab fa-youtube"></i>
+          </div>
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem;">Generate Test</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted);">Turn public YouTube video links into customizable MCQ quiz papers.</p>
+        </a>
+
+        <!-- Action 5 -->
+        <a href="progress.html" class="card" style="text-decoration: none; color: inherit;">
+          <div style="width: 45px; height: 45px; background: #e0f2fe; color: var(--info); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 0.8rem;">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem;">View Progress</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted);">Analyze your scores by difficulty and read AI-powered study advice.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Recent Tests & AI Advice Grid -->
+    <div class="grid-2">
+      <!-- Recent Test Attempts -->
+      <div class="card">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+          <h3 class="card-title"><i class="fas fa-history" style="color: var(--primary);"></i> Recent Attempts</h3>
+          <a href="history.html" style="font-size: 0.85rem; font-weight: 600;">View All</a>
+        </div>
+        <div id="recent-attempts-list">
+          <div style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading recent attempts...</div>
+        </div>
+      </div>
+
+      <!-- AI Recommendations Box -->
+      <div class="card" style="background: linear-gradient(to bottom right, #ffffff, #f8fafc);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+          <h3 class="card-title"><i class="fas fa-robot" style="color: var(--accent);"></i> AI Study Advice</h3>
+          <a href="progress.html" style="font-size: 0.85rem; font-weight: 600;">Full Analytics</a>
+        </div>
+        <div id="recommendations-box">
+          <div style="text-align: center; color: var(--text-muted); padding: 2rem;">Analyzing your performance...</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 Smart Learn – AI-Powered Learning Assistant.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      checkAuthProtection();
+      const user = getUser();
+      if (user) {
+        document.getElementById('user-welcome-name').textContent = user.name;
+      }
+
+      // Load Stats & Recent Attempts
+      try {
+        const progressData = await apiRequest('/api/progress', 'GET', null, true);
+        
+        document.getElementById('stat-tests-attempted').textContent = progressData.tests_attempted || 0;
+        document.getElementById('stat-questions-attempted').textContent = progressData.questions_attempted || 0;
+        document.getElementById('stat-avg-score').textContent = (progressData.average_score_percentage || 0) + '%';
+        document.getElementById('stat-best-score').textContent = (progressData.best_score_percentage || 0) + '%';
+
+        // Render Recent Attempts
+        const attemptsContainer = document.getElementById('recent-attempts-list');
+        if (progressData.recent_attempts && progressData.recent_attempts.length > 0) {
+          attemptsContainer.innerHTML = progressData.recent_attempts.slice(0, 5).map(att => `
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid var(--border-color);">
+              <div>
+                <div style="font-weight: 600; font-size: 0.95rem;">${att.test_title}</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">${att.created_at}</div>
+              </div>
+              <div style="text-align: right;">
+                <span class="badge ${att.percentage >= 70 ? 'badge-success' : 'badge-danger'}">
+                  ${att.score}/${att.total_questions} (${att.percentage}%)
+                </span>
+                <div style="margin-top: 0.3rem;">
+                  <a href="results.html?attempt_id=${att.attempt_id}" style="font-size: 0.8rem; font-weight: 600;">Review <i class="fas fa-chevron-right"></i></a>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        } else {
+          attemptsContainer.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+              <i class="fas fa-clipboard-list" style="font-size: 2rem; color: #cbd5e1; margin-bottom: 0.5rem; display: block;"></i>
+              No test attempts yet. Create your first YouTube test to begin!
+            </div>
+          `;
+        }
+      } catch (err) {
+        console.error('Failed to load dashboard metrics:', err);
+      }
+
+      // Load Recommendations
+      try {
+        const recData = await apiRequest('/api/recommendations', 'GET', null, true);
+        const recBox = document.getElementById('recommendations-box');
+        
+        let html = `
+          <div style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.8rem; color: var(--primary);">
+            <i class="fas fa-bullseye"></i> ${recData.overall_status || 'Keep pushing forward!'}
+          </div>
+        `;
+
+        if (recData.recommendations && recData.recommendations.length > 0) {
+          html += recData.recommendations.slice(0, 2).map(r => `
+            <div style="background: #ffffff; padding: 0.8rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 0.6rem;">
+              <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-main); display: flex; align-items: center; justify-content: space-between;">
+                <span>${r.title}</span>
+                <span class="badge badge-mixed">${r.category}</span>
+              </div>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.3rem;">${r.description}</div>
+            </div>
+          `).join('');
+        }
+        recBox.innerHTML = html;
+      } catch (err) {
+        document.getElementById('recommendations-box').innerHTML = `
+          <div style="color: var(--text-muted); font-size: 0.9rem;">
+            Take a few tests to generate personalized AI study insights.
+          </div>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Summarizer – Smart Learn</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="dashboard.html" class="brand-logo">
+        <i class="fas fa-brain"></i> Smart Learn
+      </a>
+      <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+      <ul class="nav-links">
+        <li><a href="dashboard.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="ask-ai.html" class="nav-link"><i class="fas fa-question-circle"></i> Ask AI</a></li>
+        <li><a href="explain.html" class="nav-link"><i class="fas fa-lightbulb"></i> Explain</a></li>
+        <li><a href="summarize.html" class="nav-link active"><i class="fas fa-file-alt"></i> Summarize</a></li>
+        <li><a href="test-generator.html" class="nav-link"><i class="fab fa-youtube"></i> Generate Test</a></li>
+        <li><a href="history.html" class="nav-link"><i class="fas fa-history"></i> History</a></li>
+        <li><a href="progress.html" class="nav-link"><i class="fas fa-chart-line"></i> Progress</a></li>
+        <li><a href="profile.html" class="nav-link"><i class="fas fa-user"></i> <span id="nav-user-name">Profile</span></a></li>
+        <li><a href="#" id="nav-logout-btn" class="btn btn-outline btn-sm" style="color: var(--danger); border-color: #fca5a5;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <div style="margin-bottom: 2rem;">
+      <h1 style="font-size: 2rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.6rem;">
+        <i class="fas fa-file-alt" style="color: var(--warning);"></i> Educational Text Summarizer
+      </h1>
+      <p style="color: var(--text-muted); font-size: 1.05rem;">
+        Paste any long textbook chapter, lecture notes, or research text to instantly extract structured summaries and key vocabulary.
+      </p>
+    </div>
+
+    <!-- Form Container -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <form id="summarize-form">
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+            <label class="form-label" for="text-input" style="margin: 0;">Paste Educational Text</label>
+            <span id="char-count" style="font-size: 0.8rem; color: var(--text-muted);">0 characters</span>
+          </div>
+          <textarea id="text-input" class="form-control" style="min-height: 200px;" placeholder="Paste text here (articles, transcriptions, textbook excerpts)..." required></textarea>
+        </div>
+
+        <div style="display: flex; gap: 1rem;">
+          <button type="submit" id="submit-btn" class="btn btn-primary">
+            <i class="fas fa-compress-alt"></i> Summarize Content
+          </button>
+          <button type="button" id="clear-btn" class="btn btn-outline">
+            <i class="fas fa-eraser"></i> Clear Text
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Output Container -->
+    <div id="output-container" style="display: none;" class="card">
+      <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+        <h3 class="card-title" style="margin: 0; font-size: 1.3rem;">
+          <i class="fas fa-clipboard-check" style="color: var(--success);"></i> AI Summary & Analysis
+        </h3>
+      </div>
+
+      <!-- Concise Summary -->
+      <div style="margin-bottom: 1.8rem;">
+        <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.6rem;">
+          <i class="fas fa-align-left"></i> Executive Summary
+        </h4>
+        <div id="summary-text" style="font-size: 1rem; line-height: 1.7; color: var(--text-main); background: var(--light-bg); padding: 1.2rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);"></div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom: 1.8rem;">
+        <!-- Key Points -->
+        <div style="background: var(--primary-light); padding: 1.2rem; border-radius: var(--radius-md); border-left: 4px solid var(--primary);">
+          <h4 style="font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.6rem;">
+            <i class="fas fa-list-ul"></i> Essential Main Points
+          </h4>
+          <ul id="key-points-list" style="padding-left: 1.2rem; font-size: 0.95rem; color: var(--text-main);"></ul>
+        </div>
+
+        <!-- Important Concepts -->
+        <div style="background: #fef3c7; padding: 1.2rem; border-radius: var(--radius-md); border-left: 4px solid var(--warning);">
+          <h4 style="font-size: 1rem; font-weight: 700; color: #92400e; margin-bottom: 0.6rem;">
+            <i class="fas fa-brain"></i> Core Concepts
+          </h4>
+          <ul id="concepts-list" style="padding-left: 1.2rem; font-size: 0.95rem; color: #78350f;"></ul>
+        </div>
+      </div>
+
+      <!-- Key Terms & Vocabulary -->
+      <div id="terms-section" style="display: none;">
+        <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--accent); margin-bottom: 0.8rem;">
+          <i class="fas fa-book"></i> Key Terms & Vocabulary
+        </h4>
+        <div id="terms-grid" class="grid-2"></div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 Smart Learn – AI-Powered Learning Assistant.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuthProtection();
+
+      const form = document.getElementById('summarize-form');
+      const textInput = document.getElementById('text-input');
+      const charCount = document.getElementById('char-count');
+      const submitBtn = document.getElementById('submit-btn');
+      const clearBtn = document.getElementById('clear-btn');
+      const outputContainer = document.getElementById('output-container');
+      
+      const summaryText = document.getElementById('summary-text');
+      const keyPointsList = document.getElementById('key-points-list');
+      const conceptsList = document.getElementById('concepts-list');
+      const termsSection = document.getElementById('terms-section');
+      const termsGrid = document.getElementById('terms-grid');
+
+      textInput.addEventListener('input', () => {
+        charCount.textContent = `${textInput.value.length} characters`;
+      });
+
+      clearBtn.addEventListener('click', () => {
+        textInput.value = '';
+        charCount.textContent = '0 characters';
+        outputContainer.style.display = 'none';
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const text = textInput.value.trim();
+        if (!text) return;
+
+        try {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `<div class="spinner"></div> Summarizing...`;
+          outputContainer.style.display = 'none';
+
+          const res = await apiRequest('/api/ai/summarize', 'POST', { text }, true);
+
+          summaryText.textContent = res.summary;
+
+          keyPointsList.innerHTML = (res.key_points || []).map(p => `<li style="margin-bottom: 0.4rem;">${p}</li>`).join('');
+          conceptsList.innerHTML = (res.important_concepts || []).map(c => `<li style="margin-bottom: 0.4rem;">${c}</li>`).join('');
+
+          if (res.key_terms && res.key_terms.length > 0) {
+            termsGrid.innerHTML = res.key_terms.map(t => `
+              <div style="background: #ffffff; padding: 0.9rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <div style="font-weight: 700; color: var(--accent); font-size: 0.95rem;">${t.term}</div>
+                <div style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.2rem;">${t.definition}</div>
+              </div>
+            `).join('');
+            termsSection.style.display = 'block';
+          } else {
+            termsSection.style.display = 'none';
+          }
+
+          outputContainer.style.display = 'block';
+          outputContainer.scrollIntoView({ behavior: 'smooth' });
+        } catch (err) {
+          showToast(err.message || 'Summarization failed', 'danger');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<i class="fas fa-compress-alt"></i> Summarize Content`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

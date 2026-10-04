@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ask AI Question – Smart Learn</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="dashboard.html" class="brand-logo">
+        <i class="fas fa-brain"></i> Smart Learn
+      </a>
+      <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+      <ul class="nav-links">
+        <li><a href="dashboard.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="ask-ai.html" class="nav-link active"><i class="fas fa-question-circle"></i> Ask AI</a></li>
+        <li><a href="explain.html" class="nav-link"><i class="fas fa-lightbulb"></i> Explain</a></li>
+        <li><a href="summarize.html" class="nav-link"><i class="fas fa-file-alt"></i> Summarize</a></li>
+        <li><a href="test-generator.html" class="nav-link"><i class="fab fa-youtube"></i> Generate Test</a></li>
+        <li><a href="history.html" class="nav-link"><i class="fas fa-history"></i> History</a></li>
+        <li><a href="progress.html" class="nav-link"><i class="fas fa-chart-line"></i> Progress</a></li>
+        <li><a href="profile.html" class="nav-link"><i class="fas fa-user"></i> <span id="nav-user-name">Profile</span></a></li>
+        <li><a href="#" id="nav-logout-btn" class="btn btn-outline btn-sm" style="color: var(--danger); border-color: #fca5a5;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <div style="margin-bottom: 2rem;">
+      <h1 style="font-size: 2rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.6rem;">
+        <i class="fas fa-comments" style="color: var(--primary);"></i> AI Educational Question Answering
+      </h1>
+      <p style="color: var(--text-muted); font-size: 1.05rem;">
+        Ask any academic, technical, or educational question to get instant, clear answers with key takeaways.
+      </p>
+    </div>
+
+    <!-- Question Input Form Card -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <form id="ai-question-form">
+        <div class="form-group">
+          <label class="form-label" for="question-input">Enter Your Question</label>
+          <textarea id="question-input" class="form-control" placeholder="e.g. What is the difference between supervised and unsupervised machine learning?" required></textarea>
+        </div>
+
+        <!-- Sample Question Pills -->
+        <div style="margin-bottom: 1.2rem;">
+          <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem;">Try sample questions:</div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline btn-sm sample-pill" data-q="What is Photosynthesis and why is it important for life?">Photosynthesis</button>
+            <button type="button" class="btn btn-outline btn-sm sample-pill" data-q="Explain Newton's Three Laws of Motion with real-world examples.">Newton's Laws</button>
+            <button type="button" class="btn btn-outline btn-sm sample-pill" data-q="What is the difference between REST API and GraphQL?">REST vs GraphQL</button>
+          </div>
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn btn-primary">
+          <i class="fas fa-paper-plane"></i> Ask Question
+        </button>
+      </form>
+    </div>
+
+    <!-- AI Output Box -->
+    <div id="output-container" style="display: none;" class="card">
+      <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.2rem;">
+        <h3 class="card-title" style="margin: 0;"><i class="fas fa-robot" style="color: var(--accent);"></i> AI Tutor Response</h3>
+        <span class="badge badge-success">Answer Ready</span>
+      </div>
+
+      <div style="font-weight: 700; font-size: 1.1rem; color: var(--primary); margin-bottom: 1rem;" id="q-title"></div>
+
+      <!-- Explanation Body -->
+      <div id="answer-body" style="font-size: 1rem; color: var(--text-main); line-height: 1.7; white-space: pre-wrap; margin-bottom: 1.5rem;"></div>
+
+      <!-- Key Takeaways Box -->
+      <div id="takeaways-container" style="background: var(--primary-light); border-radius: var(--radius-md); padding: 1.2rem; border-left: 4px solid var(--primary);">
+        <h4 style="font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.6rem;">
+          <i class="fas fa-star"></i> Key Takeaways
+        </h4>
+        <ul id="takeaways-list" style="padding-left: 1.2rem; color: var(--text-main); font-size: 0.95rem;"></ul>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 Smart Learn – AI-Powered Learning Assistant.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuthProtection();
+
+      const form = document.getElementById('ai-question-form');
+      const input = document.getElementById('question-input');
+      const submitBtn = document.getElementById('submit-btn');
+      const outputContainer = document.getElementById('output-container');
+      const qTitle = document.getElementById('q-title');
+      const answerBody = document.getElementById('answer-body');
+      const takeawaysList = document.getElementById('takeaways-list');
+
+      // Handle sample pill clicks
+      document.querySelectorAll('.sample-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          input.value = btn.getAttribute('data-q');
+        });
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const question = input.value.trim();
+        if (!question) return;
+
+        try {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `<div class="spinner"></div> Generating Answer...`;
+          outputContainer.style.display = 'none';
+
+          const res = await apiRequest('/api/ai/question', 'POST', { question }, true);
+
+          qTitle.textContent = res.question;
+          answerBody.textContent = res.answer;
+
+          if (res.key_takeaways && res.key_takeaways.length > 0) {
+            takeawaysList.innerHTML = res.key_takeaways.map(pt => `<li style="margin-bottom: 0.4rem;">${pt}</li>`).join('');
+            document.getElementById('takeaways-container').style.display = 'block';
+          } else {
+            document.getElementById('takeaways-container').style.display = 'none';
+          }
+
+          outputContainer.style.display = 'block';
+          outputContainer.scrollIntoView({ behavior: 'smooth' });
+        } catch (err) {
+          showToast(err.message || 'Failed to answer question', 'danger');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<i class="fas fa-paper-plane"></i> Ask Question`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

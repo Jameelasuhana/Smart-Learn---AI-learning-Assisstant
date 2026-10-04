@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Learn – AI-Powered Learning Assistant</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">
+        <i class="fas fa-brain"></i> Smart Learn
+      </a>
+      <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+      <ul class="nav-links" id="nav-menu">
+        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="login.html" class="nav-link" id="nav-login">Login</a></li>
+        <li><a href="signup.html" class="btn btn-primary btn-sm" id="nav-signup">Get Started</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: #ffffff; padding: 5rem 1.5rem; text-align: center;">
+    <div style="max-width: 900px; margin: 0 auto;">
+      <span class="badge badge-mixed" style="font-size: 0.9rem; padding: 0.4rem 1rem; margin-bottom: 1.5rem; display: inline-flex;">
+        <i class="fas fa-sparkles"></i> AI-Powered Personal Learning & Assessment
+      </span>
+      <h1 style="font-size: 3rem; font-weight: 900; line-height: 1.2; margin-bottom: 1.5rem;">
+        Learn smarter, test your knowledge, and improve your learning with AI.
+      </h1>
+      <p style="font-size: 1.2rem; color: #cbd5e1; margin-bottom: 2.5rem; max-width: 750px; margin-left: auto; margin-right: auto;">
+        Smart Learn transforms educational YouTube videos and course content into interactive, customizable MCQ tests, delivers concept explanations, text summaries, and provides data-driven study recommendations.
+      </p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="signup.html" class="btn btn-primary btn-lg" id="hero-get-started">
+          <i class="fas fa-rocket"></i> Get Started Free
+        </a>
+        <a href="login.html" class="btn btn-outline btn-lg" style="background: rgba(255,255,255,0.1); color: #ffffff; border-color: rgba(255,255,255,0.2);" id="hero-login">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="main-content">
+    
+    <!-- Feature Cards Section -->
+    <section style="margin-bottom: 4rem;">
+      <div style="text-align: center; margin-bottom: 3rem;">
+        <h2 style="font-size: 2.2rem; font-weight: 800; color: var(--text-main);">Powerful AI Learning Features</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0.5rem auto 0;">
+          Everything you need to master difficult topics and track real progress.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <!-- Feature 1 -->
+        <div class="card">
+          <div style="width: 50px; height: 50px; background: var(--primary-light); color: var(--primary); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;">
+            <i class="fas fa-comments"></i>
+          </div>
+          <h3 class="card-title">1. AI Question Answering</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Ask any educational question and receive clear, structured explanations with key takeaways generated instantly by Gemini AI.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="card">
+          <div style="width: 50px; height: 50px; background: #f0fdf4; color: var(--success); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;">
+            <i class="fas fa-lightbulb"></i>
+          </div>
+          <h3 class="card-title">2. Concept Explanation</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Break down complex concepts into Beginner, Intermediate, or Advanced levels with intuitive analogies and core principles.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="card">
+          <div style="width: 50px; height: 50px; background: #fef3c7; color: var(--warning); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3 class="card-title">3. Text Summarization</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Paste long educational chapters or articles to extract concise summaries, main points, important concepts, and key terms.
+          </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="card">
+          <div style="width: 50px; height: 50px; background: #fef2f2; color: var(--danger); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;">
+            <i class="fab fa-youtube"></i>
+          </div>
+          <h3 class="card-title">4. YouTube AI Test Generation</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Input single or multiple YouTube educational videos. Smart Learn extracts public transcripts to build custom MCQ test papers (20-100 Qs).
+          </p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="card">
+          <div style="width: 50px; height: 50px; background: #f3e8ff; color: var(--accent); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;">
+            <i class="fas fa-user-graduate"></i>
+          </div>
+          <h3 class="card-title">5. Personalized Learning</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Receive AI study recommendations based on your actual performance data, weak areas, and historical test attempts.
+          </p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="card">
+          <div style="width: 50px; height: 50px; background: #e0f2fe; color: var(--info); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3 class="card-title">6. Student Progress Tracking</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Track your tests attempted, average score, accuracy by question difficulty, and practice previously missed questions.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section style="background: #ffffff; border-radius: var(--radius-lg); padding: 3rem 2rem; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); margin-bottom: 4rem;">
+      <div style="text-align: center; margin-bottom: 3rem;">
+        <h2 style="font-size: 2.2rem; font-weight: 800; color: var(--text-main);">How Smart Learn Works</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem;">A 4-step framework designed for maximum retention</p>
+      </div>
+
+      <div class="grid-4" style="position: relative;">
+        <!-- Step 1 -->
+        <div style="text-align: center; padding: 1rem;">
+          <div style="width: 60px; height: 60px; background: var(--primary); color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; margin: 0 auto 1.2rem;">
+            1
+          </div>
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem;">Learn</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            Provide educational YouTube URLs or ask questions to understand core topics deeply.
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div style="text-align: center; padding: 1rem;">
+          <div style="width: 60px; height: 60px; background: var(--accent); color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; margin: 0 auto 1.2rem;">
+            2
+          </div>
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem;">Test</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            Attempt AI-generated MCQ tests customized by count and difficulty level.
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div style="text-align: center; padding: 1rem;">
+          <div style="width: 60px; height: 60px; background: var(--secondary); color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; margin: 0 auto 1.2rem;">
+            3
+          </div>
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem;">Analyze</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            Get instant automatic evaluation, detailed score reports, and answer explanations.
+          </p>
+        </div>
+
+        <!-- Step 4 -->
+        <div style="text-align: center; padding: 1rem;">
+          <div style="width: 60px; height: 60px; background: var(--success); color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; margin: 0 auto 1.2rem;">
+            4
+          </div>
+          <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem;">Improve</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            Practice incorrect questions and follow personalized AI study recommendations.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Smart Learn – AI-Powered Learning Assistant. All rights reserved.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = getUser();
+      if (user && getToken()) {
+        const getStartedBtn = document.getElementById('hero-get-started');
+        const loginBtn = document.getElementById('hero-login');
+        const navLogin = document.getElementById('nav-login');
+        const navSignup = document.getElementById('nav-signup');
+
+        if (getStartedBtn) {
+          getStartedBtn.href = 'dashboard.html';
+          getStartedBtn.innerHTML = `<i class="fas fa-tachometer-alt"></i> Go to Dashboard`;
+        }
+        if (loginBtn) {
+          loginBtn.style.display = 'none';
+        }
+        if (navLogin) {
+          navLogin.href = 'dashboard.html';
+          navLogin.textContent = 'Dashboard';
+        }
+        if (navSignup) {
+          navSignup.href = 'profile.html';
+          navSignup.textContent = user.name;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

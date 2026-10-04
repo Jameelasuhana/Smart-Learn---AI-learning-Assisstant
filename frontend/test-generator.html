@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube AI Test Generator – Smart Learn</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="dashboard.html" class="brand-logo">
+        <i class="fas fa-brain"></i> Smart Learn
+      </a>
+      <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+      <ul class="nav-links">
+        <li><a href="dashboard.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="ask-ai.html" class="nav-link"><i class="fas fa-question-circle"></i> Ask AI</a></li>
+        <li><a href="explain.html" class="nav-link"><i class="fas fa-lightbulb"></i> Explain</a></li>
+        <li><a href="summarize.html" class="nav-link"><i class="fas fa-file-alt"></i> Summarize</a></li>
+        <li><a href="test-generator.html" class="nav-link active"><i class="fab fa-youtube"></i> Generate Test</a></li>
+        <li><a href="history.html" class="nav-link"><i class="fas fa-history"></i> History</a></li>
+        <li><a href="progress.html" class="nav-link"><i class="fas fa-chart-line"></i> Progress</a></li>
+        <li><a href="profile.html" class="nav-link"><i class="fas fa-user"></i> <span id="nav-user-name">Profile</span></a></li>
+        <li><a href="#" id="nav-logout-btn" class="btn btn-outline btn-sm" style="color: var(--danger); border-color: #fca5a5;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <div style="margin-bottom: 2rem;">
+      <h1 style="font-size: 2rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.6rem;">
+        <i class="fab fa-youtube" style="color: var(--danger);"></i> YouTube-Based AI Test Generator
+      </h1>
+      <p style="color: var(--text-muted); font-size: 1.05rem;">
+        Extract captions from public educational YouTube videos to automatically generate customized Multiple Choice Question (MCQ) tests.
+      </p>
+    </div>
+
+    <!-- Main Generator Card -->
+    <div class="card" style="margin-bottom: 2rem;">
+
+      <div id="alert-container"></div>
+
+      <form id="test-gen-form">
+
+        <!-- Optional Test Title -->
+        <div class="form-group">
+          <label class="form-label" for="test-title">Test Title (Optional)</label>
+          <input type="text" id="test-title" class="form-control" placeholder="e.g. Machine Learning Basics - Quiz 1">
+        </div>
+
+        <!-- YouTube URLs Container -->
+        <div class="form-group">
+          <label class="form-label">Educational YouTube Video URLs</label>
+
+          <div id="yt-urls-list">
+            <!-- Default Video Input 1 -->
+            <div class="url-input-row" style="display: flex; gap: 0.6rem; margin-bottom: 0.6rem;">
+              <input type="url" class="form-control yt-url-field" placeholder="Video URL 1 (e.g. https://www.youtube.com/watch?v=...)" required>
+            </div>
+          </div>
+
+          <button type="button" id="add-url-btn" class="btn btn-outline btn-sm" style="margin-top: 0.4rem;">
+            <i class="fas fa-plus"></i> Add Another Video
+          </button>
+          <div class="form-hint">
+            Ensure videos are public and have English or closed captions enabled.
+          </div>
+        </div>
+
+        <!-- Configuration Settings Grid -->
+        <div class="grid-3" style="margin-top: 1.5rem; margin-bottom: 1.8rem; background: var(--light-bg); padding: 1.2rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          
+          <!-- Question Count Selector -->
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label" for="question-count">Question Count</label>
+            <select id="question-count" class="form-select">
+              <option value="20" selected>20 Questions</option>
+              <option value="40">40 Questions</option>
+              <option value="60">60 Questions</option>
+              <option value="100">100 Questions</option>
+            </select>
+          </div>
+
+          <!-- Difficulty Selector -->
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label" for="difficulty">Difficulty Level</label>
+            <select id="difficulty" class="form-select">
+              <option value="mixed" selected>Mixed (Balanced Easy/Med/Hard)</option>
+              <option value="easy">Easy (Foundational Recall)</option>
+              <option value="medium">Medium (Comprehension & Application)</option>
+              <option value="hard">Hard (Deep Analysis & Evaluation)</option>
+            </select>
+          </div>
+
+          <!-- Question Type -->
+          <div class="form-group" style="margin: 0;">
+            <label class="form-label" for="question-type">Question Type</label>
+            <select id="question-type" class="form-select" disabled>
+              <option value="mcq" selected>MCQ (Multiple Choice)</option>
+            </select>
+          </div>
+
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn btn-primary btn-lg" style="width: 100%;">
+          <i class="fas fa-cog"></i> Generate AI Test Paper
+        </button>
+
+      </form>
+
+    </div>
+
+    <!-- Status Loading Overlay Box -->
+    <div id="loading-card" class="card" style="display: none; text-align: center; padding: 3rem 1.5rem;">
+      <div class="spinner spinner-dark" style="width: 50px; height: 50px; margin: 0 auto 1.5rem;"></div>
+      <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;" id="loading-status-title">
+        Extracting Video Transcripts...
+      </h3>
+      <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto;" id="loading-status-desc">
+        Gemini AI is processing your educational videos and structuring custom MCQs. Please wait a moment...
+      </p>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 Smart Learn – AI-Powered Learning Assistant.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuthProtection();
+
+      const urlsContainer = document.getElementById('yt-urls-list');
+      const addUrlBtn = document.getElementById('add-url-btn');
+      const form = document.getElementById('test-gen-form');
+      const alertContainer = document.getElementById('alert-container');
+      const submitBtn = document.getElementById('submit-btn');
+      const loadingCard = document.getElementById('loading-card');
+
+      let urlCount = 1;
+
+      // Add dynamic URL row
+      addUrlBtn.addEventListener('click', () => {
+        urlCount++;
+        const row = document.createElement('div');
+        row.className = 'url-input-row';
+        row.style.display = 'flex';
+        row.style.gap = '0.6rem';
+        row.style.marginBottom = '0.6rem';
+        row.innerHTML = `
+          <input type="url" class="form-control yt-url-field" placeholder="Video URL ${urlCount} (e.g. https://www.youtube.com/watch?v=...)" required>
+          <button type="button" class="btn btn-outline btn-sm remove-url-btn" style="color: var(--danger); border-color: #fca5a5;">
+            <i class="fas fa-trash"></i>
+          </button>
+        `;
+        urlsContainer.appendChild(row);
+
+        row.querySelector('.remove-url-btn').addEventListener('click', () => {
+          row.remove();
+        });
+      });
+
+      // Submit Generator Form
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        alertContainer.innerHTML = '';
+
+        const urlFields = document.querySelectorAll('.yt-url-field');
+        const youtube_urls = Array.from(urlFields).map(f => f.value.trim()).filter(val => val.length > 0);
+
+        if (youtube_urls.length === 0) {
+          alertContainer.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> Please enter at least one YouTube URL.</div>`;
+          return;
+        }
+
+        const title = document.getElementById('test-title').value.trim();
+        const question_count = parseInt(document.getElementById('question-count').value);
+        const difficulty = document.getElementById('difficulty').value;
+
+        try {
+          submitBtn.disabled = true;
+          form.style.display = 'none';
+          loadingCard.style.display = 'block';
+
+          // Step 1: Request Test Generation
+          const testData = await apiRequest('/api/tests/generate', 'POST', {
+            youtube_urls,
+            question_count,
+            difficulty,
+            title: title || undefined
+          }, true);
+
+          showToast('Test generated successfully! Preparing test environment...', 'success');
+          
+          setTimeout(() => {
+            window.location.href = `test.html?test_id=${testData.id}`;
+          }, 1000);
+
+        } catch (err) {
+          form.style.display = 'block';
+          loadingCard.style.display = 'none';
+          submitBtn.disabled = false;
+          alertContainer.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> ${err.message}</div>`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attempt Test – Smart Learn</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="dashboard.html" class="brand-logo">
+        <i class="fas fa-brain"></i> Smart Learn
+      </a>
+      <div style="font-weight: 700; color: var(--primary);" id="top-test-title">
+        Test Attempt Mode
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Test Content -->
+  <main class="main-content">
+
+    <div id="test-loading-state" style="text-align: center; padding: 4rem 1.5rem;">
+      <div class="spinner spinner-dark" style="width: 40px; height: 40px; margin: 0 auto 1rem;"></div>
+      <p style="color: var(--text-muted); font-size: 1.1rem;">Loading your AI test paper...</p>
+    </div>
+
+    <!-- Interactive Test Container -->
+    <div id="test-main-container" style="display: none;">
+      
+      <div class="test-layout">
+
+        <!-- Left Sidebar: Question Navigation Grid -->
+        <aside class="card" style="align-self: start;">
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main);">
+            <i class="fas fa-th" style="color: var(--primary);"></i> Questions Grid
+          </h3>
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Answered: <span id="answered-count-badge" style="font-weight: 700; color: var(--primary);">0</span> / <span id="total-q-badge">0</span>
+          </div>
+
+          <div id="question-nav-grid" class="question-nav-grid"></div>
+
+          <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid var(--border-color);">
+
+          <button type="button" id="submit-test-btn" class="btn btn-primary" style="width: 100%;">
+            <i class="fas fa-paper-plane"></i> Submit Test
+          </button>
+        </aside>
+
+        <!-- Right Main Panel: Question Content -->
+        <section class="card">
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem; margin-bottom: 1.5rem;">
+            <span style="font-size: 0.9rem; font-weight: 700; color: var(--primary);" id="q-counter-text">
+              Question 1 of 20
+            </span>
+            <span id="q-difficulty-badge" class="badge badge-mixed">Medium</span>
+          </div>
+
+          <!-- Question Text -->
+          <h2 id="q-text" style="font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 1.5rem; line-height: 1.5;"></h2>
+
+          <!-- Options Form -->
+          <div id="options-container" style="margin-bottom: 2rem;"></div>
+
+          <!-- Bottom Navigation Controls -->
+          <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 1.2rem;">
+            <button type="button" id="prev-q-btn" class="btn btn-outline" disabled>
+              <i class="fas fa-arrow-left"></i> Previous
+            </button>
+
+            <button type="button" id="clear-choice-btn" class="btn btn-outline btn-sm" style="color: var(--text-muted);">
+              Clear Choice
+            </button>
+
+            <button type="button" id="next-q-btn" class="btn btn-primary">
+              Next <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+
+        </section>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 Smart Learn – AI-Powered Learning Assistant.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      checkAuthProtection();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const testId = urlParams.get('test_id');
+
+      if (!testId) {
+        showToast('No test ID specified.', 'danger');
+        setTimeout(() => { window.location.href = 'test-generator.html'; }, 1000);
+        return;
+      }
+
+      let testData = null;
+      let currentIndex = 0;
+      let selectedAnswers = {}; // question_id -> option string ("option_a", etc.)
+
+      // Fetch Test Paper
+      try {
+        testData = await apiRequest(`/api/tests/${testId}`, 'GET', null, true);
+        document.getElementById('top-test-title').textContent = testData.title || 'Smart Test Paper';
+        document.getElementById('total-q-badge').textContent = testData.questions.length;
+        
+        document.getElementById('test-loading-state').style.display = 'none';
+        document.getElementById('test-main-container').style.display = 'block';
+
+        renderNavGrid();
+        renderQuestion(currentIndex);
+      } catch (err) {
+        document.getElementById('test-loading-state').innerHTML = `
+          <div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> ${err.message}</div>
+          <a href="test-generator.html" class="btn btn-primary">Back to Generator</a>
+        `;
+      }
+
+      function renderNavGrid() {
+        const grid = document.getElementById('question-nav-grid');
+        grid.innerHTML = testData.questions.map((q, idx) => {
+          const qIdStr = String(q.id);
+          const isAnswered = selectedAnswers[qIdStr] !== undefined;
+          const isCurrent = idx === currentIndex;
+          let cls = 'q-nav-btn';
+          if (isCurrent) cls += ' current';
+          else if (isAnswered) cls += ' answered';
+
+          return `<button class="${cls}" data-index="${idx}">${idx + 1}</button>`;
+        }).join('');
+
+        grid.querySelectorAll('.q-nav-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            currentIndex = parseInt(btn.getAttribute('data-index'));
+            renderQuestion(currentIndex);
+          });
+        });
+
+        // Update count badge
+        document.getElementById('answered-count-badge').textContent = Object.keys(selectedAnswers).length;
+      }
+
+      function renderQuestion(index) {
+        const q = testData.questions[index];
+        const qIdStr = String(q.id);
+        const currentChoice = selectedAnswers[qIdStr];
+
+        document.getElementById('q-counter-text').textContent = `Question ${index + 1} of ${testData.questions.length}`;
+        
+        const diffBadge = document.getElementById('q-difficulty-badge');
+        diffBadge.textContent = (q.difficulty || 'medium').toUpperCase();
+        diffBadge.className = `badge badge-${q.difficulty || 'medium'}`;
+
+        document.getElementById('q-text').textContent = `${index + 1}. ${q.question}`;
+
+        const optionsContainer = document.getElementById('options-container');
+        const options = [
+          { key: 'option_a', text: q.option_a, label: 'A' },
+          { key: 'option_b', text: q.option_b, label: 'B' },
+          { key: 'option_c', text: q.option_c, label: 'C' },
+          { key: 'option_d', text: q.option_d, label: 'D' }
+        ];
+
+        optionsContainer.innerHTML = options.map(opt => {
+          const isSelected = currentChoice === opt.key;
+          return `
+            <div class="option-card ${isSelected ? 'selected' : ''}" data-key="${opt.key}">
+              <input type="radio" name="option_choice" value="${opt.key}" ${isSelected ? 'checked' : ''}>
+              <div style="font-weight: 700; min-width: 24px; color: var(--primary);">${opt.label}.</div>
+              <div style="font-size: 0.95rem;">${opt.text}</div>
+            </div>
+          `;
+        }).join('');
+
+        // Handle option click
+        optionsContainer.querySelectorAll('.option-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const key = card.getAttribute('data-key');
+            selectedAnswers[qIdStr] = key;
+            renderQuestion(currentIndex);
+            renderNavGrid();
+          });
+        });
+
+        // Previous / Next buttons state
+        document.getElementById('prev-q-btn').disabled = index === 0;
+        const nextBtn = document.getElementById('next-q-btn');
+        if (index === testData.questions.length - 1) {
+          nextBtn.innerHTML = `<i class="fas fa-check-double"></i> Review & Submit`;
+        } else {
+          nextBtn.innerHTML = `Next <i class="fas fa-arrow-right"></i>`;
+        }
+      }
+
+      // Prev / Next button actions
+      document.getElementById('prev-q-btn').addEventListener('click', () => {
+        if (currentIndex > 0) {
+          currentIndex--;
+          renderQuestion(currentIndex);
+          renderNavGrid();
+        }
+      });
+
+      document.getElementById('next-q-btn').addEventListener('click', () => {
+        if (currentIndex < testData.questions.length - 1) {
+          currentIndex++;
+          renderQuestion(currentIndex);
+          renderNavGrid();
+        } else {
+          submitTest();
+        }
+      });
+
+      document.getElementById('clear-choice-btn').addEventListener('click', () => {
+        const qIdStr = String(testData.questions[currentIndex].id);
+        delete selectedAnswers[qIdStr];
+        renderQuestion(currentIndex);
+        renderNavGrid();
+      });
+
+      document.getElementById('submit-test-btn').addEventListener('click', () => {
+        submitTest();
+      });
+
+      async function submitTest() {
+        const total = testData.questions.length;
+        const answered = Object.keys(selectedAnswers).length;
+        const unanswered = total - answered;
+
+        let confirmMsg = `Are you sure you want to submit your test?`;
+        if (unanswered > 0) {
+          confirmMsg = `You have ${unanswered} unanswered question(s). Are you sure you want to submit?`;
+        }
+
+        if (!confirm(confirmMsg)) return;
+
+        const submitBtn = document.getElementById('submit-test-btn');
+        try {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `<div class="spinner"></div> Evaluating...`;
+
+          const attemptRes = await apiRequest(`/api/tests/${testId}/submit`, 'POST', {
+            answers: selectedAnswers
+          }, true);
+
+          showToast('Test submitted successfully!', 'success');
+
+          setTimeout(() => {
+            window.location.href = `results.html?attempt_id=${attemptRes.id}`;
+          }, 800);
+
+        } catch (err) {
+          showToast(err.message || 'Submission failed.', 'danger');
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<i class="fas fa-paper-plane"></i> Submit Test`;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

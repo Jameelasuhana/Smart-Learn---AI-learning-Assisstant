@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test History – Smart Learn</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="dashboard.html" class="brand-logo">
+        <i class="fas fa-brain"></i> Smart Learn
+      </a>
+      <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+      <ul class="nav-links">
+        <li><a href="dashboard.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="ask-ai.html" class="nav-link"><i class="fas fa-question-circle"></i> Ask AI</a></li>
+        <li><a href="explain.html" class="nav-link"><i class="fas fa-lightbulb"></i> Explain</a></li>
+        <li><a href="summarize.html" class="nav-link"><i class="fas fa-file-alt"></i> Summarize</a></li>
+        <li><a href="test-generator.html" class="nav-link"><i class="fab fa-youtube"></i> Generate Test</a></li>
+        <li><a href="history.html" class="nav-link active"><i class="fas fa-history"></i> History</a></li>
+        <li><a href="progress.html" class="nav-link"><i class="fas fa-chart-line"></i> Progress</a></li>
+        <li><a href="profile.html" class="nav-link"><i class="fas fa-user"></i> <span id="nav-user-name">Profile</span></a></li>
+        <li><a href="#" id="nav-logout-btn" class="btn btn-outline btn-sm" style="color: var(--danger); border-color: #fca5a5;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <h1 style="font-size: 2rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.6rem;">
+          <i class="fas fa-history" style="color: var(--primary);"></i> Test & Attempt History
+        </h1>
+        <p style="color: var(--text-muted); font-size: 1.05rem;">
+          Review all your generated tests, historical scores, and reattempt previous papers.
+        </p>
+      </div>
+
+      <a href="test-generator.html" class="btn btn-primary">
+        <i class="fab fa-youtube"></i> Create New Test
+      </a>
+    </div>
+
+    <!-- History List Container -->
+    <div id="history-loading" style="text-align: center; padding: 4rem 1.5rem;">
+      <div class="spinner spinner-dark" style="width: 40px; height: 40px; margin: 0 auto 1rem;"></div>
+      <p style="color: var(--text-muted);">Loading your test paper history...</p>
+    </div>
+
+    <div id="history-list-container" class="grid-2" style="display: none;"></div>
+
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 Smart Learn – AI-Powered Learning Assistant.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      checkAuthProtection();
+
+      const container = document.getElementById('history-list-container');
+      const loader = document.getElementById('history-loading');
+
+      try {
+        const tests = await apiRequest('/api/tests/user/history', 'GET', null, true);
+        
+        loader.style.display = 'none';
+
+        if (!tests || tests.length === 0) {
+          container.style.display = 'block';
+          container.innerHTML = `
+            <div class="card" style="text-align: center; padding: 3rem 1.5rem; grid-column: 1 / -1;">
+              <i class="fas fa-file-alt" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
+              <h3 style="font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">No Tests Found</h3>
+              <p style="color: var(--text-muted); margin-bottom: 1.5rem;">You haven't generated any AI test papers yet.</p>
+              <a href="test-generator.html" class="btn btn-primary"><i class="fab fa-youtube"></i> Generate First Test</a>
+            </div>
+          `;
+          return;
+        }
+
+        container.style.display = 'grid';
+        container.innerHTML = tests.map(t => {
+          const dateStr = t.created_at ? new Date(t.created_at).toLocaleDateString() : 'Recent';
+          const diffBadge = `<span class="badge badge-${t.difficulty || 'mixed'}">${t.difficulty}</span>`;
+          
+          let scoreBadge = `<span class="badge badge-mixed">Not Attempted</span>`;
+          if (t.latest_score !== null && t.latest_score !== undefined) {
+            scoreBadge = `<span class="badge ${t.latest_percentage >= 70 ? 'badge-success' : 'badge-danger'}">Latest: ${t.latest_score}/${t.question_count} (${t.latest_percentage}%)</span>`;
+          }
+
+          return `
+            <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;">
+                  ${diffBadge}
+                  <span style="font-size: 0.8rem; color: var(--text-muted);">${dateStr}</span>
+                </div>
+
+                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">
+                  ${t.title}
+                </h3>
+
+                <div style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1rem;">
+                  <i class="fas fa-question-circle"></i> ${t.question_count} Questions | Total Attempts: ${t.total_attempts}
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                  ${scoreBadge}
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                <a href="test.html?test_id=${t.id}" class="btn btn-primary btn-sm">
+                  <i class="fas fa-play"></i> Take Test
+                </a>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+      } catch (err) {
+        loader.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> ${err.message}</div>`;
+      }
+    });
+  </script>
+</body>
+</html>

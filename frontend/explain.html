@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explain Concept – Smart Learn</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="dashboard.html" class="brand-logo">
+        <i class="fas fa-brain"></i> Smart Learn
+      </a>
+      <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+      <ul class="nav-links">
+        <li><a href="dashboard.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="ask-ai.html" class="nav-link"><i class="fas fa-question-circle"></i> Ask AI</a></li>
+        <li><a href="explain.html" class="nav-link active"><i class="fas fa-lightbulb"></i> Explain</a></li>
+        <li><a href="summarize.html" class="nav-link"><i class="fas fa-file-alt"></i> Summarize</a></li>
+        <li><a href="test-generator.html" class="nav-link"><i class="fab fa-youtube"></i> Generate Test</a></li>
+        <li><a href="history.html" class="nav-link"><i class="fas fa-history"></i> History</a></li>
+        <li><a href="progress.html" class="nav-link"><i class="fas fa-chart-line"></i> Progress</a></li>
+        <li><a href="profile.html" class="nav-link"><i class="fas fa-user"></i> <span id="nav-user-name">Profile</span></a></li>
+        <li><a href="#" id="nav-logout-btn" class="btn btn-outline btn-sm" style="color: var(--danger); border-color: #fca5a5;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <div style="margin-bottom: 2rem;">
+      <h1 style="font-size: 2rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.6rem;">
+        <i class="fas fa-lightbulb" style="color: var(--warning);"></i> Concept Explainer
+      </h1>
+      <p style="color: var(--text-muted); font-size: 1.05rem;">
+        Get tailored, step-by-step breakdowns of complex concepts formatted for your target understanding level.
+      </p>
+    </div>
+
+    <!-- Form Container -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <form id="explain-form">
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label" for="concept-input">Concept Name</label>
+            <input type="text" id="concept-input" class="form-control" placeholder="e.g. Backpropagation, Blockchain, Photosynthesis" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="level-select">Target Explanation Level</label>
+            <select id="level-select" class="form-select">
+              <option value="beginner">Beginner (Simple terms & everyday analogies)</option>
+              <option value="intermediate" selected>Intermediate (Core mechanics & clear structure)</option>
+              <option value="advanced">Advanced (Deep technical details & edge cases)</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn btn-primary">
+          <i class="fas fa-magic"></i> Explain Concept
+        </button>
+      </form>
+    </div>
+
+    <!-- Output Container -->
+    <div id="output-container" style="display: none;" class="card">
+      <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.2rem;">
+        <h3 class="card-title" style="margin: 0;">
+          <i class="fas fa-book-open" style="color: var(--primary);"></i> Concept Breakdown
+        </h3>
+        <span id="level-badge" class="badge badge-mixed">Intermediate</span>
+      </div>
+
+      <h2 id="concept-title" style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 1rem;"></h2>
+
+      <!-- Detailed Explanation Text -->
+      <div id="explanation-text" style="font-size: 1rem; line-height: 1.7; color: var(--text-main); white-space: pre-wrap; margin-bottom: 1.5rem;"></div>
+
+      <!-- Analogies Section -->
+      <div id="analogies-box" style="background: #f0fdf4; border-radius: var(--radius-md); padding: 1.2rem; border-left: 4px solid var(--success); margin-bottom: 1.2rem; display: none;">
+        <h4 style="font-size: 1rem; font-weight: 700; color: #047857; margin-bottom: 0.6rem;">
+          <i class="fas fa-lightbulb"></i> Real-World Analogies
+        </h4>
+        <ul id="analogies-list" style="padding-left: 1.2rem; color: #064e3b; font-size: 0.95rem;"></ul>
+      </div>
+
+      <!-- Key Points Section -->
+      <div id="points-box" style="background: var(--primary-light); border-radius: var(--radius-md); padding: 1.2rem; border-left: 4px solid var(--primary); display: none;">
+        <h4 style="font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.6rem;">
+          <i class="fas fa-check-circle"></i> Key Points
+        </h4>
+        <ul id="points-list" style="padding-left: 1.2rem; color: var(--text-main); font-size: 0.95rem;"></ul>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 Smart Learn – AI-Powered Learning Assistant.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuthProtection();
+
+      const form = document.getElementById('explain-form');
+      const conceptInput = document.getElementById('concept-input');
+      const levelSelect = document.getElementById('level-select');
+      const submitBtn = document.getElementById('submit-btn');
+      const outputContainer = document.getElementById('output-container');
+      const conceptTitle = document.getElementById('concept-title');
+      const explanationText = document.getElementById('explanation-text');
+      const levelBadge = document.getElementById('level-badge');
+      const analogiesBox = document.getElementById('analogies-box');
+      const analogiesList = document.getElementById('analogies-list');
+      const pointsBox = document.getElementById('points-box');
+      const pointsList = document.getElementById('points-list');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const concept = conceptInput.value.trim();
+        const level = levelSelect.value;
+        if (!concept) return;
+
+        try {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `<div class="spinner"></div> Explaining...`;
+          outputContainer.style.display = 'none';
+
+          const res = await apiRequest('/api/ai/explain', 'POST', { concept, level }, true);
+
+          conceptTitle.textContent = res.concept;
+          levelBadge.textContent = res.level.toUpperCase();
+          explanationText.textContent = res.explanation;
+
+          if (res.analogies && res.analogies.length > 0) {
+            analogiesList.innerHTML = res.analogies.map(a => `<li style="margin-bottom: 0.4rem;">${a}</li>`).join('');
+            analogiesBox.style.display = 'block';
+          } else {
+            analogiesBox.style.display = 'none';
+          }
+
+          if (res.key_points && res.key_points.length > 0) {
+            pointsList.innerHTML = res.key_points.map(p => `<li style="margin-bottom: 0.4rem;">${p}</li>`).join('');
+            pointsBox.style.display = 'block';
+          } else {
+            pointsBox.style.display = 'none';
+          }
+
+          outputContainer.style.display = 'block';
+          outputContainer.scrollIntoView({ behavior: 'smooth' });
+        } catch (err) {
+          showToast(err.message || 'Failed to explain concept', 'danger');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<i class="fas fa-magic"></i> Explain Concept`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
