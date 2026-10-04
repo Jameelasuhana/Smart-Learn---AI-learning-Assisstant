@@ -2,7 +2,7 @@
    SMART LEARN – API Client Helper Module
    ========================================================================== */
 
-const API_BASE_URL = window.API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = window.API_BASE_URL || 'https://smart-learn-ai-learning-assisstant.onrender.com';
 
 function getToken() {
   return localStorage.getItem('smart_learn_token');
